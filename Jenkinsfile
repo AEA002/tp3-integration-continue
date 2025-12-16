@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'maven:3.9.6-eclipse-temurin-21'
+            image 'maven:3.9.6-eclipse-temurin-21-alpine' 
             args '-v $HOME/.m2:/root/.m2'
             reuseNode true
         }
@@ -14,6 +14,16 @@ pipeline {
     }
     
     stages {
+        stage('Setup Git') {
+            steps {
+                sh 'apk add --no-cache git'  
+            }
+        }
+        stage('Checkout') {
+            steps {
+                checkout scm  
+            }
+        }
         // Stage 1: Checkout (sera automatique avec GitHub webhook)
         stage('Checkout') {
             steps {
