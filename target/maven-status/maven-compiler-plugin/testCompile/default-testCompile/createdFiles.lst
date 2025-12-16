@@ -1,0 +1,8 @@
+com\universite\BookControllerTest.class
+com\universite\BookServiceTest.class
+com\universite\ApplicationTest.class
+com\universite\LoanServiceTest.class
+com\universite\MemberServiceTest.class
+com\universite\BookRepositoryTest.class
+com\universite\LoanControllerTest.class
+com\universite\MemberControllerTest.class

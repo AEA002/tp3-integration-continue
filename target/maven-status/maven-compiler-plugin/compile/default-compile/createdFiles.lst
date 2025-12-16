@@ -1,0 +1,13 @@
+com\universite\Book.class
+com\universite\LibraryManagementApplication.class
+com\universite\Member.class
+com\universite\LoanController.class
+com\universite\MemberService.class
+com\universite\LoanRepository.class
+com\universite\MemberRepository.class
+com\universite\MemberController.class
+com\universite\BookController.class
+com\universite\BookRepository.class
+com\universite\BookService.class
+com\universite\LoanService.class
+com\universite\Loan.class

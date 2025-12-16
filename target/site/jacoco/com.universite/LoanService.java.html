@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoanService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TP3 Intégration Continue</a> &gt; <a href="index.source.html" class="el_package">com.universite</a> &gt; <span class="el_source">LoanService.java</span></div><h1>LoanService.java</h1><pre class="source lang-java linenums">package com.universite;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+<span class="fc" id="L10">public class LoanService {</span>
+    @Autowired
+    private LoanRepository loanRepository;
+    
+    public List&lt;Loan&gt; getAllLoans() {
+<span class="fc" id="L15">        return loanRepository.findAll();</span>
+    }
+    
+    public Optional&lt;Loan&gt; getLoanById(Long id) {
+<span class="nc" id="L19">        return loanRepository.findById(id);</span>
+    }
+    
+    public Loan createLoan(Loan loan) {
+<span class="pc bpc" id="L23" title="1 of 2 branches missed.">        if (loan.getLoanDate() == null) {</span>
+<span class="fc" id="L24">            loan.setLoanDate(LocalDate.now());</span>
+        }
+<span class="fc" id="L26">        return loanRepository.save(loan);</span>
+    }
+    
+    public Loan updateLoan(Long id, Loan loanDetails) {
+<span class="nc" id="L30">        return loanRepository.findById(id).map(loan -&gt; {</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">            if (loanDetails.getLoanDate() != null) {</span>
+<span class="nc" id="L32">                loan.setLoanDate(loanDetails.getLoanDate());</span>
+            }
+<span class="nc bnc" id="L34" title="All 2 branches missed.">            if (loanDetails.getReturnDate() != null) {</span>
+<span class="nc" id="L35">                loan.setReturnDate(loanDetails.getReturnDate());</span>
+            }
+<span class="nc" id="L37">            return loanRepository.save(loan);</span>
+<span class="nc" id="L38">        }).orElseThrow(() -&gt; new RuntimeException(&quot;Prêt non trouvé&quot;));</span>
+    }
+    
+    public void deleteLoan(Long id) {
+<span class="nc" id="L42">        loanRepository.deleteById(id);</span>
+<span class="nc" id="L43">    }</span>
+    
+    public List&lt;Loan&gt; getActiveLoans() {
+<span class="fc" id="L46">        return loanRepository.findByReturnDateIsNull();</span>
+    }
+    
+    public Loan returnBook(Long loanId) {
+<span class="fc" id="L50">        return loanRepository.findById(loanId).map(loan -&gt; {</span>
+<span class="fc" id="L51">            loan.setReturnDate(LocalDate.now());</span>
+<span class="fc" id="L52">            return loanRepository.save(loan);</span>
+<span class="pc" id="L53">        }).orElseThrow(() -&gt; new RuntimeException(&quot;Prêt non trouvé&quot;));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

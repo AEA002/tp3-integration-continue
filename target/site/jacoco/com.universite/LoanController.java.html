@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoanController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TP3 Intégration Continue</a> &gt; <a href="index.source.html" class="el_package">com.universite</a> &gt; <span class="el_source">LoanController.java</span></div><h1>LoanController.java</h1><pre class="source lang-java linenums">package com.universite;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
+@RestController
+@RequestMapping(&quot;/api/loans&quot;)
+<span class="fc" id="L10">public class LoanController {</span>
+    @Autowired
+    private LoanService loanService;
+    
+    @GetMapping
+    public List&lt;Loan&gt; getAllLoans() {
+<span class="fc" id="L16">        return loanService.getAllLoans();</span>
+    }
+    
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Loan&gt; getLoanById(@PathVariable Long id) {
+<span class="nc" id="L21">        return loanService.getLoanById(id)</span>
+<span class="nc" id="L22">                .map(ResponseEntity::ok)</span>
+<span class="nc" id="L23">                .orElse(ResponseEntity.notFound().build());</span>
+    }
+    
+    @PostMapping
+    public Loan createLoan(@RequestBody Loan loan) {
+<span class="fc" id="L28">        return loanService.createLoan(loan);</span>
+    }
+    
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Loan&gt; updateLoan(@PathVariable Long id, @RequestBody Loan loanDetails) {
+        try {
+<span class="nc" id="L34">            Loan updated = loanService.updateLoan(id, loanDetails);</span>
+<span class="nc" id="L35">            return ResponseEntity.ok(updated);</span>
+<span class="nc" id="L36">        } catch (RuntimeException e) {</span>
+<span class="nc" id="L37">            return ResponseEntity.notFound().build();</span>
+        }
+    }
+    
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Void&gt; deleteLoan(@PathVariable Long id) {
+<span class="nc" id="L43">        loanService.deleteLoan(id);</span>
+<span class="nc" id="L44">        return ResponseEntity.ok().build();</span>
+    }
+    
+    @GetMapping(&quot;/active&quot;)
+    public List&lt;Loan&gt; getActiveLoans() {
+<span class="nc" id="L49">        return loanService.getActiveLoans();</span>
+    }
+    
+    @PostMapping(&quot;/{id}/return&quot;)
+    public ResponseEntity&lt;Loan&gt; returnBook(@PathVariable Long id) {
+        try {
+<span class="fc" id="L55">            Loan returned = loanService.returnBook(id);</span>
+<span class="fc" id="L56">            return ResponseEntity.ok(returned);</span>
+<span class="nc" id="L57">        } catch (RuntimeException e) {</span>
+<span class="nc" id="L58">            return ResponseEntity.notFound().build();</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

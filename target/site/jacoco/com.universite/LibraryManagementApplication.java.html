@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LibraryManagementApplication.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TP3 Intégration Continue</a> &gt; <a href="index.source.html" class="el_package">com.universite</a> &gt; <span class="el_source">LibraryManagementApplication.java</span></div><h1>LibraryManagementApplication.java</h1><pre class="source lang-java linenums">package com.universite;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
+
+@SpringBootApplication
+<span class="fc" id="L10">public class LibraryManagementApplication {</span>
+
+    public static void main(String[] args) {
+<span class="nc" id="L13">        SpringApplication.run(LibraryManagementApplication.class, args);</span>
+<span class="nc" id="L14">    }</span>
+    
+    @Bean
+    @Profile(&quot;!test&quot;) // NE PAS exécuter pendant les tests
+    public CommandLineRunner demo(BookRepository bookRepository, 
+                                  MemberRepository memberRepository,
+                                  LoanRepository loanRepository) {
+<span class="fc" id="L21">        return args -&gt; {</span>
+            // Ajout de données de test
+<span class="fc" id="L23">            Book book1 = new Book(&quot;Le Petit Prince&quot;, &quot;Antoine de Saint-Exupéry&quot;, &quot;Conte&quot;);</span>
+<span class="fc" id="L24">            Book book2 = new Book(&quot;1984&quot;, &quot;George Orwell&quot;, &quot;Science-Fiction&quot;);</span>
+<span class="fc" id="L25">            Book book3 = new Book(&quot;Harry Potter&quot;, &quot;J.K. Rowling&quot;, &quot;Fantasy&quot;);</span>
+            
+<span class="fc" id="L27">            bookRepository.save(book1);</span>
+<span class="fc" id="L28">            bookRepository.save(book2);</span>
+<span class="fc" id="L29">            bookRepository.save(book3);</span>
+            
+<span class="fc" id="L31">            Member member1 = new Member(&quot;Alice Dupont&quot;, &quot;123 Rue de Paris&quot;, &quot;0123456789&quot;);</span>
+<span class="fc" id="L32">            Member member2 = new Member(&quot;Bob Martin&quot;, &quot;456 Avenue des Champs&quot;, &quot;0987654321&quot;);</span>
+            
+<span class="fc" id="L34">            memberRepository.save(member1);</span>
+<span class="fc" id="L35">            memberRepository.save(member2);</span>
+            
+<span class="fc" id="L37">            System.out.println(&quot;Données de test ajoutées avec succès !&quot;);</span>
+<span class="fc" id="L38">        };</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
