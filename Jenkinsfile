@@ -1,44 +1,29 @@
 pipeline {
     agent {
         docker {
-            image 'maven:3.9.6-eclipse-temurin-21-alpine' 
+            image 'maven:3.9.6-eclipse-temurin-21-alpine'
             args '-v $HOME/.m2:/root/.m2'
             reuseNode true
         }
     }
-    
-    environment {
-        // Variables pour SonarQube
-        SONAR_HOST_URL = 'http://localhost:9000'
-        SONAR_TOKEN = credentials('sonarqube-token')
-    }
-    
     stages {
         stage('Setup Git') {
             steps {
-                sh 'apk add --no-cache git'  
+                sh 'apk add --no-cache git'  // Installe Git
             }
         }
-        stage('Checkout') {
+        stage('Checkout') { 
             steps {
                 checkout scm  
             }
         }
-        // Stage 1: Checkout (sera automatique avec GitHub webhook)
-        stage('Checkout') {
-            steps {
-                echo "Code checkout via GitHub webhook"
-            }
-        }
-        
-        // Stage 2: Build
         stage('Build') {
             steps {
                 sh 'mvn clean compile'
             }
         }
         
-        // Stage 3: Tests avec JaCoCo
+        // Tests avec JaCoCo
         stage('Tests') {
             steps {
                 sh 'mvn test jacoco:report'
@@ -56,7 +41,7 @@ pipeline {
             }
         }
         
-        // Stage 4: Analyse SonarQube
+        //Analyse SonarQube
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonarqube-local') {
@@ -71,7 +56,7 @@ pipeline {
             }
         }
         
-        // Stage 5: Quality Gate
+        //Quality Gate
         stage('Quality Gate') {
             steps {
                 timeout(time: 5, unit: 'MINUTES') {
@@ -80,7 +65,7 @@ pipeline {
             }
         }
         
-        // Stage 6: Packaging
+        //Packaging
         stage('Package') {
             steps {
                 sh 'mvn package -DskipTests'
