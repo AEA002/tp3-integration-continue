@@ -1,20 +1,16 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3.9.6-eclipse-temurin-21-alpine'
-            args '-v $HOME/.m2:/root/.m2'
-            reuseNode true
-        }
+    agent any  // Utilise l'agent Jenkins principal (qui a Git)
+
+    tools {
+        // Configure Maven à installer automatiquement
+        maven 'maven-3.9'
     }
+
     stages {
-        stage('Setup Git') {
+        // SUPPRIME le stage 'Setup Git' (inutile maintenant)
+        stage('Checkout') {
             steps {
-                sh 'apk add --no-cache git'  // Installe Git
-            }
-        }
-        stage('Checkout') { 
-            steps {
-                checkout scm  
+                checkout scm
             }
         }
         stage('Build') {
