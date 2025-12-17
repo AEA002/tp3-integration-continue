@@ -38,6 +38,7 @@ pipeline {
                 withSonarQubeEnv('sonarqube-local') {
                     sh '''
                         mvn sonar:sonar \
+                          -Dsonar.host.url=http://172.17.0.1:9000 \ 
                           -Dsonar.projectKey=tp3-integration-continue \
                           -Dsonar.projectName="TP3 Integration Continue" \
                           -Dsonar.java.binaries=target/classes \
