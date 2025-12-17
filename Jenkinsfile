@@ -1,13 +1,16 @@
 pipeline {
     agent any  // Utilise l'agent Jenkins principal (qui a Git)
 
+    environment {
+        SONAR_HOST_URL = 'http://172.17.0.1:9000'
+    }
+
     tools {
         // Configure Maven à installer automatiquement
         maven 'maven-3.9'
     }
 
     stages {
-        // SUPPRIME le stage 'Setup Git' (inutile maintenant)
         stage('Checkout') {
             steps {
                 checkout scm
@@ -19,7 +22,6 @@ pipeline {
             }
         }
         
-        // Tests avec JaCoCo
         stage('Tests') {
             steps {
                 sh 'mvn test jacoco:report'
@@ -31,7 +33,6 @@ pipeline {
             }
         }
         
-        //Analyse SonarQube
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonarqube-local') {
@@ -46,7 +47,6 @@ pipeline {
             }
         }
         
-        //Quality Gate
         stage('Quality Gate') {
             steps {
                 timeout(time: 5, unit: 'MINUTES') {
@@ -55,7 +55,6 @@ pipeline {
             }
         }
         
-        //Packaging
         stage('Package') {
             steps {
                 sh 'mvn package -DskipTests'
@@ -66,22 +65,17 @@ pipeline {
     
     post {
         always {
-            // Publier les rapports JaCoCo
             publishHTML(target: [
                 reportName: 'JaCoCo Coverage Report',
                 reportDir: 'target/site/jacoco',
                 reportFiles: 'index.html',
                 keepAll: true
             ])
-            
-            // Nettoyer
             cleanWs()
         }
-        
         success {
             echo 'O Pipeline réussi ! O'
         }
-        
         failure {
             echo 'X Pipeline échoué ! X'
         }
